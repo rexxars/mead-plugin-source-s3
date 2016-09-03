@@ -1,6 +1,6 @@
 {
   "name": "mead-plugin-source-s3",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "S3 source for the Mead image transformer service",
   "main": "src/s3Source.js",
   "scripts": {
