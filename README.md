@@ -22,10 +22,10 @@ module.exports = {
   ],
 
   // Define a source using S3
-  sources: [
-    {
-      name: 'my-s3-source',
-      adapter: 's3',
+  sources: [{
+    name: 'my-s3-source',
+    adapter: {
+      type: 's3',
       config: {
         pathPrefix: 'photos', // Optional
         bucket: 'my-bucket-name',
@@ -34,7 +34,7 @@ module.exports = {
         configFile: '/path/to/s3-key.json'
       }
     }
-  ]
+  }]
 }
 ```
 
