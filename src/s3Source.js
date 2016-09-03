@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk')
+const Boom = require('boom')
 
 function s3Source(config) {
   const {configFile, accessKeyId, secretAccessKey, bucket} = config
@@ -26,10 +27,19 @@ function s3Source(config) {
 
   function getImageStream(urlPath, callback) {
     const imgPath = `${pathPrefix}/${urlPath}`.replace(/\/\//, '/')
-    setImmediate(callback, null, s3.getObject({Key: imgPath}).createReadStream())
+    const stream = s3.getObject({Key: imgPath}).createReadStream()
+      .once('readable', () => callback(null, stream))
+      .on('error', err => callback(wrapError(err)))
   }
 }
 
+function wrapError(err) {
+  if (err.code === 'NoSuchKey') {
+    return Boom.notFound('Image not found')
+  }
+
+  return Boom.badImplementation(err)
+}
 
 module.exports = {
   name: 's3',

@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.5.3",
+    "boom": "^4.0.0",
     "in-publish": "^2.0.0"
   },
   "devDependencies": {
