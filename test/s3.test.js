@@ -67,7 +67,7 @@ test('throws on missing bucket', t => {
 })
 
 test('throw on invalid credentials', t => {
-  s3Source({bucket, configFile}).getImageStream('some/image.png', err => {
+  s3Source({bucket, configFile}).getImageStream({urlPath: 'some/image.png'}, err => {
     t.ok(err instanceof Error, 'should be error')
     t.ok(err.message.toLowerCase().includes('access key'), 'should contain "access key"')
     t.equal(err.output.statusCode, 500, 'should be 500')
@@ -77,7 +77,7 @@ test('throw on invalid credentials', t => {
 
 test('[integration] 404s on missing image', intOpts, t => {
   s3Source({bucket, configFile: s3Key, pathPrefix: '/photos/'})
-    .getImageStream('logos/no-mead.png', err => {
+    .getImageStream({urlPath: 'logos/no-mead.png'}, err => {
       t.ok(err instanceof Error, 'should be error')
       t.ok(err.message.includes('not found'), 'should contain "not found"')
       t.equal(err.output.statusCode, 404, 'should be 404')
@@ -89,7 +89,7 @@ test('[integration] returns stream that retrieves a given image', intOpts, t => 
   const localBuf = fs.readFileSync(path.join(__dirname, 'fixtures', 'mead.png'))
 
   s3Source({bucket, configFile: s3Key, pathPrefix: '/photos/'})
-    .getImageStream('logos/mead.png', (err, stream) => {
+    .getImageStream({urlPath: 'logos/mead.png'}, (err, stream) => {
       t.ifError(err, 'should not callback with error')
       readStream(stream, (readErr, remoteBuf) => {
         t.ifError(readErr, 'should not error on read')
@@ -103,7 +103,7 @@ test('[integration] can auth with credentials keypair', intOpts, t => {
   const localBuf = fs.readFileSync(path.join(__dirname, 'fixtures', 'mead.png'))
 
   s3Source(Object.assign({bucket, pathPrefix: '/photos/'}, credentials))
-    .getImageStream('logos/mead.png', (err, stream) => {
+    .getImageStream({urlPath: 'logos/mead.png'}, (err, stream) => {
       t.ifError(err, 'should not callback with error')
       readStream(stream, (readErr, remoteBuf) => {
         t.ifError(readErr, 'should not error on read')

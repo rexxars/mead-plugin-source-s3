@@ -25,7 +25,8 @@ function s3Source(config) {
 
   return {getImageStream, requiresSignedUrls: false}
 
-  function getImageStream(urlPath, callback) {
+  function getImageStream(context, callback) {
+    const urlPath = context.urlPath
     const imgPath = `${pathPrefix}/${urlPath}`.replace(/\/\//, '/')
     const stream = s3.getObject({Key: imgPath}).createReadStream()
       .once('readable', () => callback(null, stream))
